@@ -1,4 +1,4 @@
-﻿
+
 var cards = (function() {
 	//The global options
 	var opt = {
@@ -78,7 +78,7 @@ var cards = (function() {
 			this.suit = suit;
 			this.rank = rank;
 			this.name = suit.toUpperCase()+rank;
-			this.faceUp = false;
+			this.faceUp = true;
 			this.el = $('<div/>').css({
 				width:opt.cardSize.width,
 				height:opt.cardSize.height,
