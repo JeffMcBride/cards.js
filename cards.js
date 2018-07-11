@@ -5,11 +5,11 @@ var cards = (function() {
 		cardSize : {width:69,height:94, padding:18},
 		animationSpeed : 500,
 		table : 'body',
-		cardback : 'red',
+		cardback : 'blue',
 		acesHigh : false,
 		cardsUrl : 'img/cards.png',
-		blackJoker : false,
-		redJoker : false
+		blackJoker : true,
+		redJoker : true
 	};
 	var zIndexCounter = 1;
 	var all = []; //All the cards created.
@@ -286,11 +286,18 @@ var cards = (function() {
 	Hand.prototype = new Container();
 	Hand.prototype.extend({
 		calcPosition : function(options) {
+			this.sum = 0;
 			options = options || {};
 			var width = opt.cardSize.width + (this.length-1)*opt.cardSize.padding;
 			var left = Math.round(this.x - width/2);
 			var top = Math.round(this.y-opt.cardSize.height/2, 0);
 			for (var i=0;i<this.length;i++) {
+				if (this[i].rank >= 10){
+					this.sum += 10;
+				}
+				else{
+					this.sum += this[i].rank;
+				}
 				this[i].targetTop = top;
 				this[i].targetLeft = left+i*opt.cardSize.padding;
 			}

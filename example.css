@@ -42,7 +42,7 @@ h1 {
 	background-color:green;
 	height:400px;
 	width:600px;
-	border:solid 6px brown;
+	border:solid 6px black;
 	border-radius:8px;
 	-webkit-border-radius:8px;
 	-moz-border-radius:8px;
@@ -57,6 +57,14 @@ a:visited {color:blue;}
 	left:310px;
 	top:170px;
 }
+
+#drop {
+	position: absolute;
+	left:425px;
+	top:315px;
+}
+
+
 
 footer {
 	font-size : 12px;
