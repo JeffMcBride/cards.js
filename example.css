@@ -64,6 +64,24 @@ a:visited {color:blue;}
 	top:315px;
 }
 
+#play {
+	position: absolute;
+	left:250px;
+	top:170px;
+}
+
+#deck {
+	position: absolute;
+	left:100px;
+	top:170px;
+}
+
+#pile {
+	position: absolute;
+	left:400px;
+	top:170px;
+}
+
 
 
 footer {
