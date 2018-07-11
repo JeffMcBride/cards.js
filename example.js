@@ -2,17 +2,16 @@
 //Tell the library which element to use for the table
 cards.init({table:'#card-table'});
 
-$('#drop').hide()
-var validMove = true;
-//Create a new deck of cards
-deck = new cards.Deck(); 
-//By default it's in the middle of the container, put it slightly to the side
-deck.x -= 50;
+$('#drop').hide();
+$('#deal').hide();
 
-//cards.all contains all cards, put them all in the deck
-deck.addCards(cards.all); 
-//No animation here, just get the deck onto the table.
-deck.render({immediate:true});
+var validMove = true;
+
+//Create a new deck of cards
+var deck = new cards.Deck(); 
+
+
+
 
 //Now lets create a couple of hands, one face down, one face up.
 upperhand = new cards.Hand({faceUp:true, y:60});
@@ -23,7 +22,19 @@ discardPile = new cards.Deck({faceUp:true});
 discardPile.x += 50;
 
 var selectedCards = [];
+var droppedCards = [];
 
+$('#play').click(function() {
+	$('#deal').show();
+	$('#play').hide();
+	//By default it's in the middle of the container, put it slightly to the side
+	deck.x -= 50;
+	//cards.all contains all cards, put them all in the deck
+	deck.addCards(cards.all); 
+	//No animation here, just get the deck onto the table.
+	deck.render({immediate:true});
+});
+	
 
 //Let's deal when the Deal button is pressed:
 $('#deal').click(function() {
@@ -51,6 +62,7 @@ deck.click(function(card){
 //Finally, when you click a card in your hand, if it's
 //the same suit or rank as the top card of the discard pile
 //then it's added to it
+
 lowerhand.click(function(card){
 		if (selectedCards.includes(card)){
 			card.rotate(0);
@@ -108,12 +120,16 @@ $('#drop').click(function() {
 	if (validMove == true){
 		for (var i = 0; i < selectedCards.length; i++){
 			discardPile.addCard(selectedCards[i]);
-			discardPile.render();
 		}
+		discardPile.render();
 		lowerhand.render();
-		selectedCards = [];
+		
+		var k = 0;
+		while (k < selectedCards.length()){
+			
+		}
 	}
-	else{
+	else {
 		alert("Invalid Move");
 	}
 });
