@@ -82,6 +82,11 @@ a:visited {color:blue;}
 	top:170px;
 }
 
+#pile2 {
+	position: absolute;
+	left:400px;
+	top:210px;
+}
 
 
 footer {

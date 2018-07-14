@@ -6,16 +6,20 @@ cards.init({
 $('#drop').hide();
 $('#deal').hide();
 $('#pile').hide();
+$('#pile2').hide();
 $('#deck').hide();
 
 var player = 1;
-
+var turn = 0;
+droppedAtTurn = []
+droppedAtTurn[0] = 1;
 
 
 var validMove = true;
 
 //Create a new deck of cards
 var deck = new cards.Deck();
+
 
 
 
@@ -64,30 +68,50 @@ $('#deal').one("click", function() {
         discardPile.addCard(deck.topCard());
         discardPile.render();
     });
-    pickUp();
-    //dropCards();
+    //pickUp();
+    dropCards();
 });
 
 function pickUp() {
     validMove = false;
+	$("#pile").html(discardPile[discardPile.length-1-droppedAtTurn[turn-1]].rank + discardPile[discardPile.length-1-droppedAtTurn[turn-1]].suit);
+	$('#deck').show();
     $('#pile').show();
-    $('#deck').show();
+	if (droppedAtTurn[turn-1] > 1){
+		$('#pile2').show();
+		$("#pile2").html(discardPile[discardPile.length-droppedAtTurn[turn-1]-selectedCards.length].rank + discardPile[discardPile.length-droppedAtTurn[turn-1]-selectedCards.length].suit);	
+	}
 }
 
 $('#pile').click(function() {
     $('#pile').hide();
     $('#deck').hide();
-    lowerhand.addCard(discardPile.topCard());
+	$('#pile2').hide();
+	lowerhand.addCard(discardPile[discardPile.length-1-droppedAtTurn[turn-1]]);
     discardPile.render();
     lowerhand.render();
     selectedCards = [];
-    dropCards();
+    dropCards(turn+2);
+    return;
+});
+
+$('#pile2').click(function() {
+    $('#pile').hide();
+    $('#deck').hide();
+	$('#pile2').hide();
+    lowerhand.addCard(discardPile[discardPile.length-droppedAtTurn[turn-1]-selectedCards.length]);
+    discardPile.render();
+    lowerhand.render();
+    selectedCards = [];
+    dropCards(turn+2);
     return;
 });
 
 
+
 $('#deck').click(function() {
     $('#pile').hide();
+	$('#pile2').hide();
     $('#deck').hide();
     lowerhand.addCard(deck.topCard());
     lowerhand.render();
@@ -99,6 +123,7 @@ $('#deck').click(function() {
 
 
 function dropCards() {
+	turn += 1;
     lowerhand.click(function(card) {
         if (selectedCards.includes(card)) {
             card.rotate(0);
@@ -150,11 +175,12 @@ function dropCards() {
         $('#drop').hide();
         if (validMove == true) {
             for (var i = 0; i < selectedCards.length; i++) {
-                discardPile.addCard(selectedCards[i]);
+                discardPile.addCard(selectedCards[i]);	
             }
             discardPile.render();
             lowerhand.render();
-            selectedCards = [];
+			droppedAtTurn[turn] = selectedCards.length;
+			selectedCards=[];
             pickUp();
         } else {
             alert("Invalid Move");
