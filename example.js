@@ -74,12 +74,12 @@ $('#deal').one("click", function() {
 
 function pickUp() {
     validMove = false;
-	$("#pile").html(discardPile[discardPile.length-1-droppedAtTurn[turn-1]].rank + discardPile[discardPile.length-1-droppedAtTurn[turn-1]].suit);
+	$("#pile").html(setButtonName(discardPile[discardPile.length-1-selectedCards.length]));
 	$('#deck').show();
     $('#pile').show();
 	if (droppedAtTurn[turn-1] > 1){
 		$('#pile2').show();
-		$("#pile2").html(discardPile[discardPile.length-droppedAtTurn[turn-1]-selectedCards.length].rank + discardPile[discardPile.length-droppedAtTurn[turn-1]-selectedCards.length].suit);	
+		$("#pile2").html(setButtonName(discardPile[discardPile.length-droppedAtTurn[turn-1]-selectedCards.length]));
 	}
 }
 
@@ -87,11 +87,11 @@ $('#pile').click(function() {
     $('#pile').hide();
     $('#deck').hide();
 	$('#pile2').hide();
-	lowerhand.addCard(discardPile[discardPile.length-1-droppedAtTurn[turn-1]]);
+	lowerhand.addCard(discardPile[discardPile.length-selectedCards.length-1]);
     discardPile.render();
     lowerhand.render();
     selectedCards = [];
-    dropCards(turn+2);
+    dropCards();
     return;
 });
 
@@ -103,7 +103,7 @@ $('#pile2').click(function() {
     discardPile.render();
     lowerhand.render();
     selectedCards = [];
-    dropCards(turn+2);
+    dropCards();
     return;
 });
 
@@ -180,7 +180,7 @@ function dropCards() {
             discardPile.render();
             lowerhand.render();
 			droppedAtTurn[turn] = selectedCards.length;
-			selectedCards=[];
+			//selectedCards = [];
             pickUp();
         } else {
             alert("Invalid Move");
@@ -192,4 +192,30 @@ function dropCards() {
         }
     });
     return;
+}
+
+function setButtonName(card){
+	var rank = card.rank;
+	var suit = card.suit;
+	switch(rank){
+		case 11: //Jack
+			rank = "J"
+			break;
+		case 12: //Queen
+			rank = "Q"		
+			break;
+		case 13: //King
+			rank = "K"		
+			break;
+		case 0: //Joker
+			rank = "JOKER"
+			if (suit == "bj"){suit = " Black"}
+			if (suit == "rj"){suit = " Red"}
+			break;
+		case 1: //Ace
+			rank = "A"
+			break;
+	}
+			
+	return (rank + suit.charAt(0).toUpperCase());
 }
