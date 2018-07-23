@@ -8,11 +8,13 @@ $('#deal').hide();
 $('#pile').hide();
 $('#pile2').hide();
 $('#deck').hide();
+$('#yaniv').hide();
 
 var dropReady = true;
 var player = 1;
 var turn = 0;
 droppedAtTurn = []
+droppedAtTurn[0] = 1;
 droppedAtTurn[0] = 1;
 
 
@@ -39,7 +41,7 @@ discardPile.x += 50;
 var selectedCards = [];
 var droppedCards = [];
 
-$('#play').one("click", function() {
+$('#play').click(function() {
     $('#deal').show();
     $('#play').hide();
     //By default it's in the middle of the container, put it slightly to the side
@@ -55,7 +57,7 @@ $('#play').one("click", function() {
 
 
 //Let's deal when the Deal button is pressed:
-$('#deal').one("click", function() {
+$('#deal').click(function() {
     //Deck has a built in method to deal to hands.
     $('#deal').hide()
     deck.deal(7, [upperhand, lowerhand], 50, function() {
@@ -69,6 +71,7 @@ $('#deal').one("click", function() {
 });
 
 function pickUp() {
+	$('#yaniv').hide();
 	dropReady = false;
     validMove = false;
 	$("#pile").html(setButtonName(discardPile[discardPile.length-1-selectedCards.length]));
@@ -81,7 +84,6 @@ function pickUp() {
 }
 
 $('#pile').click(function() {
-	alert(selectedCards);
     $('#pile').hide();
     $('#deck').hide();
 	$('#pile2').hide();
@@ -118,10 +120,26 @@ $('#deck').click(function() {
 });
 
 
+$('#yaniv').click(function() {
+	deck.addCards(cards.all);
+	deck.render();    
+	$('#yaniv').hide();
+	$('#drop').hide();
+	$('#deal').show();
+	selectedCards = [];
+	droppedCards = [];
+	cards.shuffle(deck);
+});
+
+
+
 function dropCards() {
 	dropReady = true;
 	$('#drop').show();
 	turn += 1;
+	if (lowerhand.sum <= 70){
+		$('#yaniv').show();
+	}
 	lowerhand.click(function(card) {
 		if (dropReady == true){
 			if (selectedCards.includes(card)) {
@@ -226,3 +244,5 @@ function setButtonName(card){
 	}			
 	return (rank + suit.charAt(0).toUpperCase());
 }
+
+
