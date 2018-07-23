@@ -60,7 +60,7 @@ a:visited {color:blue;}
 
 #drop {
 	position: absolute;
-	left:425px;
+	left:400px;
 	top:315px;
 }
 
@@ -86,6 +86,12 @@ a:visited {color:blue;}
 	position: absolute;
 	left:400px;
 	top:210px;
+}
+
+#yaniv {
+	position: absolute;
+	left:100px;
+	top:315px;
 }
 
 
