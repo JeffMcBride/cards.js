@@ -9,6 +9,7 @@ $('#pile').hide();
 $('#pile2').hide();
 $('#deck').hide();
 
+var dropReady = true;
 var player = 1;
 var turn = 0;
 droppedAtTurn = []
@@ -20,11 +21,6 @@ var validMove = true;
 //Create a new deck of cards
 var deck = new cards.Deck();
 
-
-
-
-
-//Now lets create a couple of hands, one face down, one face up.
 upperhand = new cards.Hand({
     faceUp: true,
     y: 60
@@ -73,6 +69,7 @@ $('#deal').one("click", function() {
 });
 
 function pickUp() {
+	dropReady = false;
     validMove = false;
 	$("#pile").html(setButtonName(discardPile[discardPile.length-1-selectedCards.length]));
 	$('#deck').show();
@@ -84,6 +81,7 @@ function pickUp() {
 }
 
 $('#pile').click(function() {
+	alert(selectedCards);
     $('#pile').hide();
     $('#deck').hide();
 	$('#pile2').hide();
@@ -107,8 +105,6 @@ $('#pile2').click(function() {
     return;
 });
 
-
-
 $('#deck').click(function() {
     $('#pile').hide();
 	$('#pile2').hide();
@@ -123,73 +119,85 @@ $('#deck').click(function() {
 
 
 function dropCards() {
+	dropReady = true;
+	$('#drop').show();
 	turn += 1;
-    lowerhand.click(function(card) {
-        if (selectedCards.includes(card)) {
-            card.rotate(0);
-            var index = selectedCards.indexOf(card);
-            if (index > -1) {
-                selectedCards.splice(index, 1);
-            }
-        } else {
-            selectedCards.push(card);
-            card.rotate(8);
-        }
-        if (selectedCards.length > 0) {
-            $('#drop').show();
-        } else {
-            $('#drop').hide();
-        }
+	lowerhand.click(function(card) {
+		if (dropReady == true){
+			if (selectedCards.includes(card)) {
+				card.rotate(0);
+				var index = selectedCards.indexOf(card);
+				if (index > -1) {
+					selectedCards.splice(index, 1);
+				}
+			} else {
+				selectedCards.push(card);
+				card.rotate(8);
+			}
 
-        var ranks = [];
-        validMove = true;
-        var pair = true;
-        //Check for valid move
-        for (var j = 0; j < selectedCards.length; j++) {
-            //Check for pairs
-            if (selectedCards[j].rank != selectedCards[0].rank) {
-                pair = false;
-                // Check for same suit
-                if (selectedCards[j].suit != selectedCards[0].suit) {
-                    validMove = false;
-                }
-            }
-            ranks.push(selectedCards[j].rank);
-        }
-        ranks.sort();
-        // Check for a run
-        if (validMove == true && pair == false) {
-            if (ranks.length < 3) {
-                validMove = false;
-            } else {
-                //Check for a run
-                for (var k = 1; k < ranks.length; k++) {
-                    if (ranks[k] != (ranks[k - 1] + 1)) {
-                        validMove = false;
-                    }
-                }
-            }
-        }
-    });
+			var ranks = [];
+			validMove = true;
+			var joker = 0;
+			var pair = true;
+			//Check for valid move
+			for (var j = 0; j < selectedCards.length; j++) {
+				//Check for pairs
+				if (selectedCards[j].rank != selectedCards[0].rank) {
+					pair = false;
+					// Check for same suit
+					if (selectedCards[j].suit != selectedCards[0].suit) {
+			  //          if (selectedCards[0].rank == 0){
+				//			joker += 1;
+					//	}
+						//else{
+							validMove = false;
+						// }
+					}
+				}
+				ranks.push(selectedCards[j].rank);
+			}
+			ranks.sort();
+			// Check for a run
+			if (validMove == true && pair == false) {
+				if (ranks.length < 3) {
+					validMove = false;
+				} else {
+					//Check for a run
+					for (var k = 1; k < ranks.length; k++) {
+						if (ranks[k] != (ranks[k - 1] + 1)) {
+							validMove = false;
+						}
+					}
+				}
+			}
+		}
+	});
+		
     $('#drop').one("click", function() {
-        $('#drop').hide();
-        if (validMove == true) {
-            for (var i = 0; i < selectedCards.length; i++) {
-                discardPile.addCard(selectedCards[i]);	
-            }
-            discardPile.render();
-            lowerhand.render();
-			droppedAtTurn[turn] = selectedCards.length;
-			//selectedCards = [];
-            pickUp();
-        } else {
-            alert("Invalid Move");
-            selectedCards = [];
-            discardPile.render();
-            lowerhand.render();
-            dropCards();
+		if (selectedCards.length == 0){
+			alert("Selected your cards homie")
+			dropCards();
+		}
+		else{
+			$('#drop').hide();
+			if (validMove == true) {
+				for (var i = 0; i < selectedCards.length; i++) {
+					discardPile.addCard(selectedCards[i]);	
+				}
+				discardPile.render();
+				lowerhand.render();
+				droppedAtTurn[turn] = selectedCards.length;
+				pickUp();
+			} 
+			else {
+				alert("Invalid Move");
+				selectedCards = [];
+				discardPile.render();
+				lowerhand.render();
+				dropCards();
 
-        }
+			}
+		}
     });
     return;
 }
@@ -215,7 +223,6 @@ function setButtonName(card){
 		case 1: //Ace
 			rank = "A"
 			break;
-	}
-			
+	}			
 	return (rank + suit.charAt(0).toUpperCase());
 }
