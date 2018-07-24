@@ -15,7 +15,6 @@ var player = 1;
 var turn = 0;
 droppedAtTurn = []
 droppedAtTurn[0] = 1;
-droppedAtTurn[0] = 1;
 
 
 var validMove = true;
@@ -66,7 +65,6 @@ $('#deal').click(function() {
         discardPile.addCard(deck.topCard());
         discardPile.render();
     });
-    //pickUp();
     dropCards();
 });
 
@@ -120,15 +118,22 @@ $('#deck').click(function() {
 });
 
 
-$('#yaniv').click(function() {
+$('#yaniv').one("click", function(){
 	deck.addCards(cards.all);
-	deck.render();    
-	$('#yaniv').hide();
-	$('#drop').hide();
-	$('#deal').show();
 	selectedCards = [];
 	droppedCards = [];
 	cards.shuffle(deck);
+	turn = 0;
+	droppedAtTurn = []
+	droppedAtTurn[0] = 1; 
+	deck.render();
+	validMove = true;
+	$('#yaniv').hide();
+	$('#drop').hide();
+	$('#deal').show();
+	lowerhand.render();
+	upperhand.render();
+	discardPile.render();
 });
 
 
@@ -152,7 +157,6 @@ function dropCards() {
 				selectedCards.push(card);
 				card.rotate(8);
 			}
-
 			var ranks = [];
 			validMove = true;
 			var joker = 0;
@@ -164,12 +168,7 @@ function dropCards() {
 					pair = false;
 					// Check for same suit
 					if (selectedCards[j].suit != selectedCards[0].suit) {
-			  //          if (selectedCards[0].rank == 0){
-				//			joker += 1;
-					//	}
-						//else{
-							validMove = false;
-						// }
+						validMove = false;
 					}
 				}
 				ranks.push(selectedCards[j].rank);
@@ -192,6 +191,7 @@ function dropCards() {
 	});
 		
     $('#drop').one("click", function() {
+		alert(selectedCards.length);
 		if (selectedCards.length == 0){
 			alert("Selected your cards homie")
 			dropCards();
@@ -213,7 +213,6 @@ function dropCards() {
 				discardPile.render();
 				lowerhand.render();
 				dropCards();
-
 			}
 		}
     });
