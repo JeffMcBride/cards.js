@@ -8,8 +8,8 @@ var cards = (function() {
 		cardback : 'blue',
 		acesHigh : false,
 		cardsUrl : 'img/cards.png',
-		blackJoker : true,
-		redJoker : true
+		blackJoker : false,
+		redJoker : false
 	};
 	var zIndexCounter = 1;
 	var all = []; //All the cards created.
@@ -78,7 +78,7 @@ var cards = (function() {
 			this.suit = suit;
 			this.rank = rank;
 			this.name = suit.toUpperCase()+rank;
-			this.faceUp = true;
+			this.faceUp = false;
 			this.el = $('<div/>').css({
 				width:opt.cardSize.width,
 				height:opt.cardSize.height,

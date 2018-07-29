@@ -94,6 +94,20 @@ a:visited {color:blue;}
 	top:315px;
 }
 
+#score1 {
+	position: absolute;
+	font-size: 25px;
+	left:25px;
+	top:275px;
+}
+
+#score2 {
+	position: absolute;
+	font-size: 25px;
+	left:25px;
+	top:100px;
+}
+
 
 footer {
 	font-size : 12px;
